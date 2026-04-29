@@ -1,6 +1,7 @@
 package com.dance.me.school.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class SchoolService {
                 .orElseThrow(() -> new ResourceNotFoundException("School", id));
     }
 
-    public List<SchoolResponse> findByUserId(Long userId) {
+    public List<SchoolResponse> findByUserId(UUID userId) {
         return schoolRepository.findByUserId(userId).stream()
                 .map(schoolMapper::toResponse)
                 .toList();

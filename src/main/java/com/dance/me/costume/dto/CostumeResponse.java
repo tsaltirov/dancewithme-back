@@ -1,27 +1,22 @@
 package com.dance.me.costume.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import com.dance.me.costume.entity.CostumeStatus;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+// Catálogo: respuesta de un vestuario
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CostumeResponse {
 
     private Long id;
-    private Long participationId;
-    private String studentName;
-    private String eventTitle;
+    private Long schoolId;
+    private String name;
     private String description;
-    private CostumeStatus status;
-    private LocalDate deliveryDate;
-    private LocalDate returnDate;
-    private String observations;
+    private String imageUrl;
+    private String notes;
+    private Integer quantity;
+    private Boolean active;
+    private LocalDateTime createdAt;
 }

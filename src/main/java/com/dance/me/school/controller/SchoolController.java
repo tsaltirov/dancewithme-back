@@ -1,6 +1,7 @@
 package com.dance.me.school.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class SchoolController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<SchoolResponse>>> getByUserId(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<List<SchoolResponse>>> getByUserId(@PathVariable UUID userId) {
         return ResponseEntity.ok(ApiResponse.ok(schoolService.findByUserId(userId)));
     }
 

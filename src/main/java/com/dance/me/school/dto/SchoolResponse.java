@@ -1,6 +1,7 @@
 package com.dance.me.school.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,8 @@ public class SchoolResponse {
     private String address;
     private String phone;
     private String email;
-    private Long userId;
+    private String imageUrl;
+    private UUID userId;
     private Boolean active;
     private LocalDateTime createdAt;
 }
