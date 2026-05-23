@@ -23,5 +23,6 @@ public class UserResponse {
     private Role role;
     private Boolean active;
     private Boolean emailVerified;
+    private String imageUrl;
     private LocalDateTime createdAt;
 }

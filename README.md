@@ -79,6 +79,75 @@ Cada `/refresh` rota el refresh token. Un reseteo de contraseña revoca todas la
 | Método | Ruta | Descripción |
 |---|---|---|
 | `GET` | `/users/{id}` | Obtener usuario por ID |
+| `PATCH` | `/users/{id}/profile` | Actualizar nombre, apellido e imagen de perfil |
+
+### Escuelas
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/schools/user/{userId}` | Escuelas de un usuario |
+| `GET` | `/schools/{id}` | Detalle de una escuela |
+| `POST` | `/schools` | Crear escuela |
+| `PUT` | `/schools/{id}` | Actualizar escuela |
+
+### Grupos y matrículas
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/groups/school/{schoolId}` | Grupos de una escuela |
+| `GET` | `/groups/{id}` | Detalle de un grupo |
+| `POST` | `/groups` | Crear grupo |
+| `PUT` | `/groups/{id}` | Actualizar grupo |
+| `DELETE` | `/groups/{id}` | Desactivar grupo (soft delete) |
+| `GET` | `/enrollments/group/{groupId}` | Matrículas de un grupo |
+| `GET` | `/enrollments/student/{studentId}` | Matrículas de un alumno |
+| `POST` | `/enrollments` | Matricular alumno |
+| `DELETE` | `/enrollments/{id}` | Cancelar matrícula |
+
+### Eventos
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/events/school/{schoolId}` | Eventos de una escuela |
+| `GET` | `/events/{id}` | Detalle de un evento |
+| `POST` | `/events` | Crear evento |
+| `PUT` | `/events/{id}` | Actualizar evento |
+| `PATCH` | `/events/{id}/cancel` | Cancelar evento |
+| `GET` | `/events/{eventId}/prices` | Precios del evento |
+| `POST` | `/events/{eventId}/prices` | Añadir precio |
+| `PUT` | `/events/{eventId}/prices/{priceId}` | Actualizar precio |
+| `DELETE` | `/events/{eventId}/prices/{priceId}` | Eliminar precio |
+| `GET` | `/events/{eventId}/participations` | Participaciones del evento |
+| `POST` | `/events/participations` | Apuntar alumno a evento |
+| `DELETE` | `/events/participations/{participationId}` | Desapuntar alumno de evento |
+
+### Vestuario
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/costumes?schoolId=&active=` | Catálogo de prendas (`active` opcional: `true`/`false`/sin filtro) |
+| `GET` | `/costumes/{id}` | Detalle de prenda |
+| `POST` | `/costumes` | Crear prenda |
+| `PUT` | `/costumes/{id}` | Actualizar prenda |
+| `DELETE` | `/costumes/{id}` | Desactivar prenda (soft delete) |
+| `PATCH` | `/costumes/{id}/activate` | Reactivar prenda archivada |
+| `POST` | `/costumes/assign` | Asignar prenda a participación |
+| `GET` | `/costumes/assignments/participation/{id}` | Asignaciones de una participación |
+| `GET` | `/costumes/assignments/pending` | Asignaciones pendientes de devolución |
+| `PATCH` | `/costumes/assignments/{id}/return` | Marcar prenda como devuelta |
+| `DELETE` | `/costumes/assignments/{id}` | Eliminar asignación (solo si está en ENTREGADO) |
+
+### Coreografías
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/coreografias/school/{schoolId}` | Coreografías de una escuela |
+| `GET` | `/coreografias/{id}` | Detalle completo (bailarines, escenas, posiciones) |
+| `POST` | `/coreografias` | Crear coreografía |
+| `PUT` | `/coreografias/{id}` | Actualizar metadatos |
+| `PUT` | `/coreografias/{id}/document` | Guardar documento completo (reemplaza todo) |
+| `DELETE` | `/coreografias/{id}` | Eliminar coreografía |
+| `GET` | `/coreografias/public/{schoolId}/{publicSlug}` | Vista pública (sin auth) |
 
 ## Variables de entorno
 

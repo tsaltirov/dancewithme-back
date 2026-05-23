@@ -38,10 +38,16 @@ public class CostumeService {
 
     // ── Catálogo CRUD ─────────────────────────────────────────────────────────
 
-    public List<CostumeResponse> findBySchool(Long schoolId) {
-        return costumeRepository.findBySchoolIdAndActiveTrue(schoolId).stream()
-                .map(costumeMapper::toResponse)
-                .toList();
+    public List<CostumeResponse> findBySchool(Long schoolId, Boolean active) {
+        List<Costume> results;
+        if (active == null) {
+            results = costumeRepository.findBySchoolId(schoolId);
+        } else if (active) {
+            results = costumeRepository.findBySchoolIdAndActiveTrue(schoolId);
+        } else {
+            results = costumeRepository.findBySchoolIdAndActiveFalse(schoolId);
+        }
+        return results.stream().map(costumeMapper::toResponse).toList();
     }
 
     public CostumeResponse findById(Long id) {
@@ -54,7 +60,7 @@ public class CostumeService {
                 .orElseThrow(() -> new ResourceNotFoundException("School", request.getSchoolId()));
 
         if (costumeRepository.existsByNameAndSchoolId(request.getName(), request.getSchoolId())) {
-            throw new BadRequestException("Ya existe un vestuario con ese nombre en esta escuela");
+            throw new BadRequestException("Ya existe un vestuario con ese nombre en esta escuela", "COSTUME_DUPLICATE_NAME");
         }
 
         Costume costume = Costume.builder()
@@ -89,6 +95,14 @@ public class CostumeService {
         costumeRepository.save(costume);
     }
 
+    @Transactional
+    public CostumeResponse activate(Long id) {
+        Costume costume = costumeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Costume", id));
+        costume.setActive(true);
+        return costumeMapper.toResponse(costumeRepository.save(costume));
+    }
+
     // ── Asignaciones a eventos ────────────────────────────────────────────────
 
     public List<EventCostumeResponse> findAssignmentsByParticipation(Long participationId) {
@@ -118,7 +132,8 @@ public class CostumeService {
                     costume.getId(), CostumeStatus.DEVUELTO);
             if (inUse >= costume.getQuantity()) {
                 throw new BadRequestException(
-                        "No hay unidades disponibles de \"" + costume.getName() + "\"");
+                        "No hay unidades disponibles de \"" + costume.getName() + "\"",
+                        "COSTUME_NO_STOCK");
             }
         }
 
@@ -129,6 +144,20 @@ public class CostumeService {
                 .build();
 
         return costumeMapper.toEventResponse(eventCostumeRepository.save(assignment));
+    }
+
+    @Transactional
+    public void deleteAssignment(Long assignmentId) {
+        EventCostume ec = eventCostumeRepository.findById(assignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("EventCostume", assignmentId));
+
+        if (ec.getStatus() != CostumeStatus.ENTREGADO) {
+            throw new BadRequestException(
+                    "Solo se puede deshacer una asignación en estado ENTREGADO. Estado actual: " + ec.getStatus(),
+                    "COSTUME_INVALID_STATUS");
+        }
+
+        eventCostumeRepository.delete(ec);
     }
 
     @Transactional

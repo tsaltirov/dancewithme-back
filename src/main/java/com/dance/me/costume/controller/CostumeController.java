@@ -35,8 +35,10 @@ public class CostumeController {
     // ── Catálogo ──────────────────────────────────────────────────────────────
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CostumeResponse>>> getBySchool(@RequestParam Long schoolId) {
-        return ResponseEntity.ok(ApiResponse.ok(costumeService.findBySchool(schoolId)));
+    public ResponseEntity<ApiResponse<List<CostumeResponse>>> getBySchool(
+            @RequestParam Long schoolId,
+            @RequestParam(required = false) Boolean active) {
+        return ResponseEntity.ok(ApiResponse.ok(costumeService.findBySchool(schoolId, active)));
     }
 
     @GetMapping("/{id}")
@@ -62,6 +64,11 @@ public class CostumeController {
         return ResponseEntity.ok(ApiResponse.ok("Vestuario desactivado", null));
     }
 
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<ApiResponse<CostumeResponse>> activate(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.ok("Vestuario activado", costumeService.activate(id)));
+    }
+
     // ── Asignaciones a eventos ────────────────────────────────────────────────
 
     @PostMapping("/assign")
@@ -85,5 +92,11 @@ public class CostumeController {
     @PatchMapping("/assignments/{id}/return")
     public ResponseEntity<ApiResponse<EventCostumeResponse>> markAsReturned(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.ok("Vestuario devuelto", costumeService.markAsReturned(id)));
+    }
+
+    @DeleteMapping("/assignments/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteAssignment(@PathVariable Long id) {
+        costumeService.deleteAssignment(id);
+        return ResponseEntity.ok(ApiResponse.ok("Asignación eliminada", null));
     }
 }
