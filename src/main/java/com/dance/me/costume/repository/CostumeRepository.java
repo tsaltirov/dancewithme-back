@@ -10,5 +10,9 @@ public interface CostumeRepository extends JpaRepository<Costume, Long> {
 
     List<Costume> findBySchoolIdAndActiveTrue(Long schoolId);
 
+    List<Costume> findBySchoolIdAndActiveFalse(Long schoolId);
+
+    List<Costume> findBySchoolId(Long schoolId);
+
     boolean existsByNameAndSchoolId(String name, Long schoolId);
 }

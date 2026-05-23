@@ -13,9 +13,12 @@ import com.dance.me.event.dto.EventRequest;
 import com.dance.me.event.dto.EventResponse;
 import com.dance.me.event.dto.ParticipationRequest;
 import com.dance.me.event.dto.ParticipationResponse;
+import com.dance.me.costume.entity.CostumeStatus;
+import com.dance.me.costume.repository.EventCostumeRepository;
 import com.dance.me.event.entity.Event;
 import com.dance.me.event.entity.EventParticipation;
 import com.dance.me.event.entity.EventPrice;
+import com.dance.me.event.entity.EventStatus;
 import com.dance.me.event.mapper.EventMapper;
 import com.dance.me.event.repository.EventParticipationRepository;
 import com.dance.me.event.repository.EventPriceRepository;
@@ -35,6 +38,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventParticipationRepository participationRepository;
     private final EventPriceRepository priceRepository;
+    private final EventCostumeRepository eventCostumeRepository;
     private final SchoolRepository schoolRepository;
     private final StudentRepository studentRepository;
     private final EventMapper eventMapper;
@@ -118,12 +122,45 @@ public class EventService {
         priceRepository.delete(price);
     }
 
+    // ── Estado ───────────────────────────────────────────────────────────────
+
+    @Transactional
+    public EventResponse cancel(Long id) {
+        Event event = getEvent(id);
+        if (event.getStatus() == EventStatus.CANCELADO) {
+            throw new BadRequestException("El evento ya está cancelado");
+        }
+        event.setStatus(EventStatus.CANCELADO);
+        event = eventRepository.save(event);
+        return eventMapper.toResponse(event, priceRepository.findByEventId(id));
+    }
+
     // ── Participaciones ───────────────────────────────────────────────────────
 
     public List<ParticipationResponse> findParticipationsByEventId(Long eventId) {
         return participationRepository.findByEventId(eventId).stream()
                 .map(eventMapper::toParticipationResponse)
                 .toList();
+    }
+
+    @Transactional
+    public void removeParticipation(Long participationId) {
+        EventParticipation participation = participationRepository.findById(participationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Participation", participationId));
+
+        boolean hasPendingCostumes = eventCostumeRepository
+                .findByParticipationId(participationId).stream()
+                .anyMatch(ec -> ec.getStatus() != CostumeStatus.DEVUELTO);
+
+        if (hasPendingCostumes) {
+            throw new BadRequestException(
+                    "El alumno tiene vestuario pendiente de devolución. Recupéralo antes de desapuntarlo.");
+        }
+
+        // Borrar primero los costumes ya devueltos (FK) y luego la participación
+        eventCostumeRepository.deleteAll(
+                eventCostumeRepository.findByParticipationId(participationId));
+        participationRepository.delete(participation);
     }
 
     @Transactional

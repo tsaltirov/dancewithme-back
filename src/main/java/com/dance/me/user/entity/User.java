@@ -52,6 +52,9 @@ public class User implements UserDetails {
     @Builder.Default
     private Boolean emailVerified = false;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
