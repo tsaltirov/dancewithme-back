@@ -162,4 +162,5 @@ Crea un fichero `.env` en la raíz del proyecto:
 
 
 # v1.0.0-beta 
+# DanceWithMe 2026
 
