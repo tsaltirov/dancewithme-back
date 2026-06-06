@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dance.me.common.dto.ApiResponse;
+import com.dance.me.school.dto.AddMemberRequest;
+import com.dance.me.school.dto.SchoolMemberResponse;
 import com.dance.me.school.dto.SchoolRequest;
 import com.dance.me.school.dto.SchoolResponse;
 import com.dance.me.school.service.SchoolService;
+import com.dance.me.user.entity.User;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -59,5 +64,31 @@ public class SchoolController {
     public ResponseEntity<ApiResponse<Void>> deactivate(@PathVariable Long id) {
         schoolService.deactivate(id);
         return ResponseEntity.ok(ApiResponse.ok("Escuela desactivada", null));
+    }
+
+    // ── Miembros ──────────────────────────────────────────────────────────────
+
+    @GetMapping("/{schoolId}/members")
+    public ResponseEntity<ApiResponse<List<SchoolMemberResponse>>> getMembers(
+            @PathVariable Long schoolId) {
+        return ResponseEntity.ok(ApiResponse.ok(schoolService.findMembers(schoolId)));
+    }
+
+    @PostMapping("/{schoolId}/members")
+    public ResponseEntity<ApiResponse<SchoolMemberResponse>> addMember(
+            @PathVariable Long schoolId,
+            @AuthenticationPrincipal User currentUser,
+            @Valid @RequestBody AddMemberRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Miembro añadido", schoolService.addMember(schoolId, currentUser.getId(), request)));
+    }
+
+    @DeleteMapping("/{schoolId}/members/{userId}")
+    public ResponseEntity<ApiResponse<Void>> removeMember(
+            @PathVariable Long schoolId,
+            @PathVariable UUID userId,
+            @AuthenticationPrincipal User currentUser) {
+        schoolService.removeMember(schoolId, currentUser.getId(), userId);
+        return ResponseEntity.ok(ApiResponse.ok("Miembro eliminado", null));
     }
 }

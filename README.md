@@ -89,6 +89,9 @@ Cada `/refresh` rota el refresh token. Un reseteo de contraseña revoca todas la
 | `GET` | `/schools/{id}` | Detalle de una escuela |
 | `POST` | `/schools` | Crear escuela |
 | `PUT` | `/schools/{id}` | Actualizar escuela |
+| `GET`    | `/schools/{schoolId}/members`            | Listar miembros de la escuela |
+| `POST`   | `/schools/{schoolId}/members`            | Añadir miembro (solo OWNER) |
+| `DELETE` | `/schools/{schoolId}/members/{userId}`   | Eliminar miembro (solo OWNER) |
 
 ### Grupos y matrículas
 
@@ -152,7 +155,12 @@ Cada `/refresh` rota el refresh token. Un reseteo de contraseña revoca todas la
 ## Variables de entorno
 
 Crea un fichero `.env` en la raíz del proyecto:
+| Mirar .env.example
 
 # Swagger UI disponible en:
 # http://localhost:3002/swagger-ui.html
+
+
+# v1.0.0-beta 
+# DanceWithMe 2026
 
