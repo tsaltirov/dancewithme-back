@@ -37,6 +37,12 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", email));
     }
 
+    public UserResponse searchByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email)
+                .map(userMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("User", email));
+    }
+
     @Transactional
     public UserResponse updateProfile(UUID id, UpdateProfileRequest request) {
         User user = userRepository.findById(id)

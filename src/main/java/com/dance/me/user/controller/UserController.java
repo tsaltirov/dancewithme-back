@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dance.me.common.dto.ApiResponse;
@@ -28,6 +29,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.ok(userService.findById(id)));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<UserResponse>> searchByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.searchByEmail(email)));
     }
 
     @PatchMapping("/{id}/profile")
