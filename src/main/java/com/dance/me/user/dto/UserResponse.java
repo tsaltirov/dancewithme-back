@@ -1,6 +1,7 @@
 package com.dance.me.user.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.dance.me.user.entity.Role;
 
@@ -15,11 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponse {
 
-    private Long id;
+    private UUID id;
     private String name;
     private String lastName;
     private String email;
     private Role role;
     private Boolean active;
+    private Boolean emailVerified;
+    private String imageUrl;
     private LocalDateTime createdAt;
 }

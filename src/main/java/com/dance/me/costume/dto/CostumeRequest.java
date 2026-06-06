@@ -2,22 +2,20 @@ package com.dance.me.costume.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+// Catálogo: crear / actualizar un vestuario de la escuela
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CostumeRequest {
 
-    @NotNull(message = "La participación es obligatoria")
-    private Long participationId;
+    @NotNull(message = "La escuela es obligatoria")
+    private Long schoolId;
 
-    @NotBlank(message = "La descripción es obligatoria")
+    @NotBlank(message = "El nombre es obligatorio")
+    private String name;
+
     private String description;
-
-    private String observations;
+    private String imageUrl;
+    private String notes;
+    private Integer quantity;
 }

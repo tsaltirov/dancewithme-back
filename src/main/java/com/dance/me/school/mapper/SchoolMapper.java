@@ -17,6 +17,7 @@ public class SchoolMapper {
                 .address(school.getAddress())
                 .phone(school.getPhone())
                 .email(school.getEmail())
+                .imageUrl(school.getImageUrl())
                 .userId(school.getUser().getId())
                 .active(school.getActive())
                 .createdAt(school.getCreatedAt())
@@ -29,6 +30,7 @@ public class SchoolMapper {
                 .address(request.getAddress())
                 .phone(request.getPhone())
                 .email(request.getEmail())
+                .imageUrl(request.getImageUrl())
                 .user(user)
                 .build();
     }

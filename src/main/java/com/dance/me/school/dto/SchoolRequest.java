@@ -1,5 +1,7 @@
 package com.dance.me.school.dto;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +26,8 @@ public class SchoolRequest {
     @Email(message = "Email no válido")
     private String email;
 
+    private String imageUrl;
+
     @NotNull(message = "El usuario propietario es obligatorio")
-    private Long userId;
+    private UUID userId;
 }

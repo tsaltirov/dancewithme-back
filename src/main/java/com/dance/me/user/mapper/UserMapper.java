@@ -16,6 +16,8 @@ public class UserMapper {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .active(user.getActive())
+                .emailVerified(user.getEmailVerified())
+                .imageUrl(user.getImageUrl())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

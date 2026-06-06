@@ -1,17 +1,9 @@
 package com.dance.me.config.web;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+// CORS gestionado centralmente en SecurityConfig.corsConfigurationSource()
+// No configurar aquí — tener dos fuentes CORS activas al mismo tiempo causa conflictos
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/v1/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                .allowedHeaders("*");
-    }
+public class WebConfig {
 }
